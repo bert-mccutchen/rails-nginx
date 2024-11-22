@@ -2,6 +2,7 @@
 
 require "socket"
 require "ruby/nginx"
+require_relative "./nginx/version"
 
 module Rails
   module Nginx
