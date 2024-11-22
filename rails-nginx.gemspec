@@ -14,11 +14,10 @@ Gem::Specification.new do |spec|
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.0.0"
 
-  spec.metadata["allowed_push_host"] = "https://github.com/bert-mccutchen/rails-nginx"
-  spec.metadata["rubygems_mfa_required"] = "true"
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/bert-mccutchen/rails-nginx"
-  spec.metadata["changelog_uri"] = "https://github.com/bert-mccutchen/rails-nginx/releases"
+  spec.metadata["changelog_uri"] = "https://github.com/bert-mccutchen/rails-nginx/blob/main/CHANGELOG.md"
+  spec.metadata["rubygems_mfa_required"] = "true"
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
