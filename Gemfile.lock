@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rails-nginx (1.0.0.pre.alpha)
+    rails-nginx (1.0.0.pre.alpha.1)
       puma
       rails
       ruby-nginx
