@@ -2,7 +2,7 @@
 
 require "socket"
 require "ruby/nginx"
-require_relative "./nginx/version"
+require_relative "nginx/version"
 
 module Rails
   module Nginx
@@ -17,13 +17,17 @@ module Rails
 
       config = Ruby::Nginx.add!(options.reverse_merge(defaults(options)), &block)
 
-      puts start_message(config.options) # rubocop:disable Rails/Output
+      puts start_message(config.options)
+    rescue Ruby::Nginx::Error => e
+      abort "[Ruby::Nginx] #{e.message}"
     end
 
     def self.stop!(options = {}, &block)
       return unless rails_server?
 
       Ruby::Nginx.remove!(options.reverse_merge(defaults(options)), &block)
+    rescue Ruby::Nginx::Error => e
+      abort "[Ruby::Nginx] #{e.message}"
     end
 
     private
