@@ -1,14 +1,38 @@
 # Rails NGINX
 
-Automatically configure NGINX with SSL upon boot for Rails applications.
+Rails Puma plugin convenience wrapper for Ruby NGINX. Take a look at the [Ruby NGINX project documentation](https://github.com/bert-mccutchen/ruby-nginx) for more in depth details.
 
-1. ERB for NGINX configuration templating.
-2. Mkcert for SSL certificate generation.
-3. Tried and true NGINX for reverse proxying.
+:heart: ERB for NGINX configuration templating.
 
-This gem is intended to be an aid to your development environment. **Don't use this in production.**
+:yellow_heart: Self-signed certificate generation via mkcert for HTTPS.
+
+:green_heart: Tried and true NGINX for reverse proxying, and hosts mapping for DNS.
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/M4M76DVZR)
+
+---
+
+> [!WARNING]
+>This gem is intended to be an aid to your development environment - powered by [Ruby NGINX](https://github.com/bert-mccutchen/ruby-nginx). **Don't use this gem in production.**
+
+---
+
+### Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Basic Usage](#basic-usage)
+  - [Default Configuration](#default-configuration)
+  - [Advanced Usage](#advanced-usage)
+    - [Multiple Configurations](#multiple-configurations)
+    - [Inheriting Configurations](#inheriting-configurations)
+- [Development](#development)
+  - [Setup](#setup)
+  - [Lint / Test](#lint--test)
+  - [Debug Console](#debug-console)
+  - [Release](#release)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Installation
 
@@ -24,44 +48,123 @@ gem install rails-nginx
 
 ## Usage
 
-### config/puma.rb
+### Basic Usage
+
+Simply add the Puma plugin to your configuration, and limit it to your development environment.
+
+**config/puma.rb**
 ```ruby
-port ENV.fetch('PORT') { 3000 } unless Rails.env.development?
-
 plugin :rails_nginx if Rails.env.development?
+```
 
-# All configuration is entirely optional, the following blocks are not required.
-rails_nginx_config(:primary) do |config|
-  config[:domain] = 'route1.spline-reticulator.test' # default eg. rails-app-name.test
-  config[:host] = '0.0.0.0' # default '127.0.0.1'
-  config[:root_path] = './public' # default `Rails.public_path`
-  config[:ssl] = false # default true
-  config[:log] = false # default true
+> [!IMPORTANT]
+> Puma's `port` configuration option makes it impossible for Rails NGINX to automatically find and host on an open port, or ingest the port you may provide from the Rails command line (`rails s -p 3001`). To fix this issue, simply remove it from your Puma configuration:
+>
+> **config/puma.rb**
+> ```ruby
+> port ENV.fetch("PORT") { 3000 }
+> ```
+>
+> OR simply disable it in your development environment:
+> ```ruby
+> pport ENV.fetch("PORT") { 3000 } unless Rails.env.development?
+> ```
 
-  # default location Rails.root + tmp/nginx/
-  config[:ssl_certificate_path] = './tmp/certs/_spline-reticulator.test.pem'
-  config[:ssl_certificate_key_path] = './tmp/certs/_spline-reticulator-key.test.pem'
+### Default Configuration
+By default, Rails NGINX will configure [Ruby NGINX](https://github.com/bert-mccutchen/ruby-nginx) with the following options. For the examples, pretend I have an application called "HelloWorld".
+
+| Option | Default | Example |
+|---|---|---|
+| `domain` | Your rails app name as dashes, with the test TLD. | `hello-world.test` |
+| `host` | `127.0.0.1` | |
+| `root_path` | `Rails.public_path` | `/home/bert/hello_world/public` |
+| `ssl` | `true` | |
+| `log` | `true` | |
+| `ssl_certificate_path` | `Rails.root` + `tmp/nginx/_[DOMAIN].pem` | `/home/bert/hello_world/tmp/nginx/_hello-world.test.pem` |
+| `ssl_certificate_key_path` | `Rails.root` + `tmp/nginx/_[DOMAIN]-key.pem` | `/home/bert/hello_world/tmp/nginx/_hello-world.test-key.pem` |
+| `access_log_path` | `Rails.root` + `log/nginx/[DOMAIN].access.log` | `/home/bert/hello_world/log/hello-world.test.access.log` |
+| `error_log_path` | `Rails.root` + `log/nginx/[DOMAIN].error.log` | `/home/bert/hello_world/log/hello-world.test.error.log` |
+
+### Advanced Usage
+
+You can override all the default values and provide your own configuration. Rails NGINX will use your configuration automatically if one is present. Default values are retained if not overridden.
+
+**config/puma.rb**
+```ruby
+rails_nginx_config do |config|
+  config[:domain] = "example.test"
+  config[:host] = "localhost"
+  # etc.
+end
+```
+
+#### Multiple Configurations
+
+Let's say you have a multi-tenant Rails application, and you want to simulate the application running behind two separate domains in your development environment. No problem, Rails NGINX can support multiple configurations, no matter how wildly different they may be.
+
+**config/puma.rb**
+```ruby
+rails_nginx_config(:work) do |config|
+  config[:domain] = "work.todo-list.test"
+  config[:ssl] = true
+  config[:log] = true
+
+  config[:ssl_certificate_path] = "~/work/my-cert.pem"
+  config[:ssl_certificate_key_path] = "~/work/my-cert-key.pem"
 
   # default location Rails.root + log/nginx/
-  config[:access_log_path] = './log/route1.nginx.access.log'
-  config[:error_log_path] = './log/route1.nginx.error.log'
+  config[:access_log_path] = "~/work/logs/todo-list.access.log"
+  config[:error_log_path] = "~/work/logs/todo-list.error.log"
 end
 
-# You can define multiple configurations and all will be created on puma boot.
-rails_nginx_config(:secondary) do |config|
-  config.merge!(rails_nginx_config(:primary))
+rails_nginx_config(:home) do |config|
+  config[:domain] = "home.todo-list.test"
+  config[:ssl] = false
+  config[:log] = false
+end
+```
 
-  config[:domain] = 'route2.spline-reticulator.test'
-  config[:access_log_path] = './log/route2.nginx.access.log'
-  config[:error_log_path] = './log/route2.nginx.error.log'
+#### Inheriting Configurations
+
+Since Rails NGINX configurations are a simple Ruby Hash, you can merge configurations to prevent needless duplication. This is possible because Rails NGINX allows you to read back previously defined configurations.
+
+**config/puma.rb**
+```ruby
+rails_nginx_config(:kids) do |config|
+  config.merge!(rails_nginx_config(:home))
+
+  config[:domain] = "kids.todo-list.test"
+  config[:log] = true
 end
 ```
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+### Setup
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+Install development dependencies.
+```
+./bin/setup
+```
+
+### Lint / Test
+
+Run the Standard Ruby linter, and RSpec test suite.
+```
+bundle exec rake
+```
+
+### Debug Console
+
+Start an interactive Ruby console (IRB).
+```
+./bin/console
+```
+
+### Release
+
+A new release will automatically be built and uploaded to RubyGems by a [GitHub Actions workflow](./.github/workflows/gem-push.yml) upon the push of a new Git tag.
+
 
 ## Contributing
 
