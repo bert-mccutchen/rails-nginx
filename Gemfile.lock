@@ -289,7 +289,6 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  puma
   rails-nginx!
   rake
   rspec
