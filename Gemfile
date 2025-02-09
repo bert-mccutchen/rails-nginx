@@ -5,6 +5,6 @@ source "https://rubygems.org"
 # Specify your gem's dependencies in rails-nginx.gemspec
 gemspec
 
-gem "rake", "~> 13.0"
-gem "rspec", "~> 3.0"
-gem "standard", "~> 1.42"
+gem "rake"
+gem "rspec"
+gem "standard"

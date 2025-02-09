@@ -1,0 +1,23 @@
+#!/bin/bash
+
+script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+
+# Update Rails gem
+cd "${script_dir}/.." || exit 1
+bundle update rails
+
+# Generate a new Dummy application
+cd "./spec" || exit 1
+rm -rf ./dummy
+bundle exec rails new dummy --rc="../.dummy.railsrc"
+
+# Add rails-nginx to the Gemfile
+cd ./dummy || exit 1
+echo "gem \"rails-nginx\", path: \"../..\"" >> ./Gemfile
+bundle install
+
+# Configure Puma with rails-nginx
+echo "plugin :rails_nginx" >> ./config/puma.rb
+
+echo "Done!"
+exit 0
