@@ -2,6 +2,6 @@
 
 module Rails
   module Nginx
-    VERSION = "1.0.0-alpha.1"
+    VERSION = "1.0.0-beta"
   end
 end
