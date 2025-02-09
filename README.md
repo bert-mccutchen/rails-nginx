@@ -154,6 +154,15 @@ Run the Standard Ruby linter, and RSpec test suite.
 bundle exec rake
 ```
 
+#### Generating a new Dummy server
+
+There's a built-in executable if you'd like to generate a new Dummy server to upgrade the regression tests to work with the latest version of Rails.
+
+This executable will delete the current `spec/dummy` directory, update the `rails` gem to the latest version, and generate a new `spec/dummy` application using the options defined in the `.dummy.railsrc` file.
+```
+./bin/dummy
+```
+
 ### Debug Console
 
 Start an interactive Ruby console (IRB).
