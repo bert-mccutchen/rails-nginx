@@ -19,6 +19,9 @@ RSpec.configure do |config|
   config.dummy_path = File.expand_path("./dummy", __dir__)
 
   config.before(:suite) do
+    Ruby::Nginx.remove!(domain: "dummy.test")
+    Ruby::Nginx.remove!(domain: "custom.dummy.test")
+
     puts "Starting Dummy Server"
     DummyServer.instance.start
   rescue

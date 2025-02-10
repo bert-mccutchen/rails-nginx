@@ -1,21 +1,35 @@
 # frozen_string_literal: true
 
 RSpec.describe Rails::Nginx do
-  it "adds the hosts mapping" do
+  it "adds the default hosts mapping" do
     RetryExpectation.new(limit: 30, delay: 1).attempt do
       hosts = File.read("/etc/hosts")
-      expect(hosts).to include("dummy.test")
+      expect(hosts).to include("127.0.0.1 dummy.test")
     end
   end
 
-  it "creates the NGINX configuration" do
+  it "adds the custom hosts mapping" do
+    RetryExpectation.new(limit: 30, delay: 1).attempt do
+      hosts = File.read("/etc/hosts")
+      expect(hosts).to include("127.0.0.1 custom.dummy.test")
+    end
+  end
+
+  it "creates the default NGINX configuration" do
     RetryExpectation.new(limit: 30, delay: 1).attempt do
       path = File.expand_path("~/.ruby-nginx/servers/ruby_nginx_dummy_test.conf")
       expect(File.exist?(path)).to be_truthy
     end
   end
 
-  it "creates the SSL certificate" do
+  it "creates the custom NGINX configuration" do
+    RetryExpectation.new(limit: 30, delay: 1).attempt do
+      path = File.expand_path("~/.ruby-nginx/servers/ruby_nginx_custom_dummy_test.conf")
+      expect(File.exist?(path)).to be_truthy
+    end
+  end
+
+  it "creates the default SSL certificate" do
     RetryExpectation.new(limit: 30, delay: 1).attempt do
       path = "#{RSpec.configuration.dummy_path}/tmp/nginx/_dummy.test.pem"
       expect(File.exist?(path)).to be_truthy
@@ -25,7 +39,17 @@ RSpec.describe Rails::Nginx do
     end
   end
 
-  it "creates the log files" do
+  it "does not create the custom SSL certificate" do
+    RetryExpectation.new(limit: 30, delay: 1).attempt do
+      path = "#{RSpec.configuration.dummy_path}/tmp/nginx/_custom.dummy.test.pem"
+      expect(File.exist?(path)).to be_falsey
+
+      path = "#{RSpec.configuration.dummy_path}/tmp/nginx/_custom.dummy.test-key.pem"
+      expect(File.exist?(path)).to be_falsey
+    end
+  end
+
+  it "creates the default log files" do
     RetryExpectation.new(limit: 30, delay: 1).attempt do
       path = "#{RSpec.configuration.dummy_path}/log/nginx/dummy.test.access.log"
       expect(File.exist?(path)).to be_truthy
@@ -35,13 +59,33 @@ RSpec.describe Rails::Nginx do
     end
   end
 
-  it "successfully builds up a NGINX site" do
+  it "does not create the custom log files" do
+    RetryExpectation.new(limit: 30, delay: 1).attempt do
+      path = "#{RSpec.configuration.dummy_path}/log/nginx/custom.dummy.test.access.log"
+      expect(File.exist?(path)).to be_falsey
+
+      path = "#{RSpec.configuration.dummy_path}/log/nginx/custom.dummy.test.error.log"
+      expect(File.exist?(path)).to be_falsey
+    end
+  end
+
+  it "successfully builds up the default NGINX site with SSL" do
     RetryExpectation.new(limit: 30, delay: 1).attempt do
       html = `curl -s http://dummy.test`
       expect(html).to include("Rails version")
 
       html = `curl -s https://dummy.test`
       expect(html).to include("Rails version")
+    end
+  end
+
+  it "successfully builds up the custom NGINX site without SSL" do
+    RetryExpectation.new(limit: 30, delay: 1).attempt do
+      html = `curl -s http://custom.dummy.test`
+      expect(html).to include("Rails version")
+
+      html = `curl -s https://custom.dummy.test`
+      expect(html).to eq("")
     end
   end
 end

@@ -9,3 +9,9 @@
 
 # rspec failure tracking
 .rspec_status
+
+# Dummy server
+spec/dummy/config/credentials.yml.enc
+spec/dummy/config/master.key
+spec/dummy/log
+spec/dummy/tmp

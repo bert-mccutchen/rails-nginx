@@ -17,7 +17,24 @@ echo "gem \"rails-nginx\", path: \"../..\"" >> ./Gemfile
 bundle install
 
 # Configure Puma with rails-nginx
-echo "plugin :rails_nginx" >> ./config/puma.rb
+cat >> ./config/puma.rb << EOF
+plugin :rails_nginx
+
+rails_nginx_config(:default)
+
+rails_nginx_config(:custom) do |config|
+  config[:domain] = "custom.dummy.test"
+  config[:ssl] = false
+  config[:log] = false
+end
+EOF
+
+# Configure the development environment hosts
+config="\\
+  config.hosts << \"custom.dummy.test\"\\
+  config.log_level = :warn\\
+"
+sed -i -e "s/configure do/configure do\n${config}/g" ./config/environments/development.rb
 
 echo "Done!"
 exit 0

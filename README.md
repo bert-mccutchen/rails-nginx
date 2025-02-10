@@ -102,7 +102,7 @@ You can override all the default values and provide your own configuration. Rail
 ```ruby
 rails_nginx_config do |config|
   config[:domain] = "example.test"
-  config[:host] = "localhost"
+  config[:host] = "127.0.0.1"
   # etc.
 end
 ```

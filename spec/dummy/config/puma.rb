@@ -37,3 +37,11 @@ plugin :tmp_restart
 # In other environments, only set the PID file if requested.
 pidfile ENV["PIDFILE"] if ENV["PIDFILE"]
 plugin :rails_nginx
+
+rails_nginx_config(:default)
+
+rails_nginx_config(:custom) do |config|
+  config[:domain] = "custom.dummy.test"
+  config[:ssl] = false
+  config[:log] = false
+end
