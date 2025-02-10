@@ -12,6 +12,21 @@ Rails Puma plugin convenience wrapper for Ruby NGINX. Take a look at the [Ruby N
 
 ---
 
+### Key Features
+
+The aim of this gem is to be easy to use, while keeping the user in control of their own machine. With [Ruby NGINX](https://github.com/bert-mccutchen/ruby-nginx)'s automation, you should feel comfortable, informed, and in control of the process.
+
+- Automated installation of NGINX and mkcert that are entirely optional.
+  - You will be prompted before installation. You may reject installation to install NGINX or mkcert on your own terms.
+- Sudo - only when necessary, and on your own terms.
+  - By default, all attempts to configure or interact with NGINX, /etc/hosts, and mkcert, are done without elevated privileges. Sudo is only used when the initial attempt fails with your users privileges.
+  - You will be prompted to accept sudo elevation, and why it is required. Rejection will immediately abort the process.
+- Isolated NGINX configuration.
+  - Your NGINX configuration will automatically be updated to include configuration files from `~/.ruby-nginx/servers`. This ensures a clean separation exists between your personal NGINX configuration and [Ruby NGINX](https://github.com/bert-mccutchen/ruby-nginx)'s automation.
+- Cross-platform and support for multiple package managers.
+  - macOS - brew
+  - Linux - apt-get, pacman, yum, zypper
+
 > [!WARNING]
 >This gem is intended to be an aid to your development environment - powered by [Ruby NGINX](https://github.com/bert-mccutchen/ruby-nginx). **Don't use this gem in production.**
 
