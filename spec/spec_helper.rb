@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-ENV["SKIP_PROMPT"] = "true"
-
 require "rails/nginx"
 
 Dir[File.expand_path("support/**/*.rb", __dir__)].each { |file| require file }
@@ -19,19 +17,4 @@ RSpec.configure do |config|
 
   config.add_setting :dummy_path
   config.dummy_path = File.expand_path("./dummy", __dir__)
-
-  config.before(:suite) do
-    Ruby::Nginx.remove!(domain: "dummy.test")
-    Ruby::Nginx.remove!(domain: "custom.dummy.test")
-
-    puts "Starting Dummy Server"
-    DummyServer.instance.start
-  rescue
-    DummyServer.instance.stop
-  end
-
-  config.after(:suite) do
-    puts "Stopping Dummy Server"
-    DummyServer.instance.stop
-  end
 end

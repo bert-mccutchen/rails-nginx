@@ -27,7 +27,7 @@ def rails_port!
 end
 
 Puma::Plugin.create do
-  def config(puma_config) # rubocop:disable Metrics/MethodLength
+  def config(puma_config)
     rails_port!
 
     puma_config.port Rails::Nginx.port
@@ -54,7 +54,7 @@ Puma::Plugin.create do
       end
     end
 
-    if defined?(puma_config.on_stopped) # rubocop:disable Style/GuardClause
+    if defined?(puma_config.on_stopped)
       puma_config.on_stopped do
         if puma_config.rails_nginx_configs.empty?
           Rails::Nginx.stop!

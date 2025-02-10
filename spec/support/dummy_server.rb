@@ -9,12 +9,12 @@ class DummyServer
 
   def initialize
     @semaphore = Mutex.new
-    @server = nil
+    @pid = nil
   end
 
   def start
     @semaphore.synchronize do
-      @server = Thread.new do
+      @pid = Process.fork do
         require "rails/commands"
         require "rails/commands/server/server_command"
 
@@ -25,7 +25,8 @@ class DummyServer
 
   def stop
     @semaphore.synchronize do
-      @server.exit if @server.alive?
+      Process.kill(:TERM, @pid)
+      Process.wait
     end
   end
 end

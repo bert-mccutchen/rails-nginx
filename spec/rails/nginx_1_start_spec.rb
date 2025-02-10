@@ -1,6 +1,18 @@
 # frozen_string_literal: true
 
 RSpec.describe Rails::Nginx do
+  before(:all) do
+    puts "Starting Dummy Server"
+    DummyServer.instance.start
+  rescue
+    DummyServer.instance.stop
+  end
+
+  after(:all) do
+    puts "Stopping Dummy Server"
+    DummyServer.instance.stop
+  end
+
   it "adds the default hosts mapping" do
     RetryExpectation.new(limit: 30, delay: 1).attempt do
       hosts = File.read("/etc/hosts")

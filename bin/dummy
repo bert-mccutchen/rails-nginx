@@ -16,6 +16,10 @@ cd ./dummy || exit 1
 echo "gem \"rails-nginx\", path: \"../..\"" >> ./Gemfile
 bundle install
 
+# We need Puma 6.50 for the new on_stopped hook.
+bundle remove puma
+bundle add puma ">= 6.5.0"
+
 # Configure Puma with rails-nginx
 cat >> ./config/puma.rb << EOF
 plugin :rails_nginx
