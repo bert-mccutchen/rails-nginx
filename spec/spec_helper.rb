@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+ENV["SKIP_PROMPT"] = "true"
+
 require "rails/nginx"
 
 Dir[File.expand_path("support/**/*.rb", __dir__)].each { |file| require file }
