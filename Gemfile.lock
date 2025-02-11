@@ -1,10 +1,10 @@
 PATH
   remote: .
   specs:
-    rails-nginx (1.0.0.pre.beta.2)
+    rails-nginx (1.0.0.pre.beta.3)
       puma
       rails
-      ruby-nginx (>= 1.0.0.pre.beta.2)
+      ruby-nginx (>= 1.0.0.pre.beta.3)
 
 GEM
   remote: https://rubygems.org/
@@ -229,11 +229,10 @@ GEM
     rubocop-performance (1.23.1)
       rubocop (>= 1.48.1, < 2.0)
       rubocop-ast (>= 1.31.1, < 2.0)
-    ruby-nginx (1.0.0.pre.beta.2)
+    ruby-nginx (1.0.0.pre.beta.3)
       erb
       thor
       tty-command (~> 0.10, >= 0.10.1)
-      tty-prompt (>= 0.3.0)
     ruby-progressbar (1.13.0)
     securerandom (0.4.1)
     standard (1.44.0)
@@ -254,15 +253,6 @@ GEM
     tty-color (0.6.0)
     tty-command (0.10.1)
       pastel (~> 0.8)
-    tty-cursor (0.7.1)
-    tty-prompt (0.23.1)
-      pastel (~> 0.8)
-      tty-reader (~> 0.8)
-    tty-reader (0.9.0)
-      tty-cursor (~> 0.7)
-      tty-screen (~> 0.8)
-      wisper (~> 2.0)
-    tty-screen (0.8.2)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (3.1.4)
@@ -274,7 +264,6 @@ GEM
       base64
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    wisper (2.0.1)
     zeitwerk (2.7.1)
 
 PLATFORMS
