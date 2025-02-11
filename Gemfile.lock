@@ -1,10 +1,10 @@
 PATH
   remote: .
   specs:
-    rails-nginx (1.0.0.pre.beta)
+    rails-nginx (1.0.0.pre.beta.1)
       puma
       rails
-      ruby-nginx
+      ruby-nginx (>= 1.0.0.pre.beta.1)
 
 GEM
   remote: https://rubygems.org/
@@ -104,7 +104,7 @@ GEM
       pp (>= 0.6.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
-    json (2.9.1)
+    json (2.10.1)
     language_server-protocol (3.17.0.4)
     lint_roller (1.1.0)
     logger (1.6.5)
@@ -124,7 +124,6 @@ GEM
       date
       net-protocol
     net-pop (0.1.2)
-      net-protocol
     net-protocol (0.2.2)
       timeout
     net-smtp (0.5.1)
@@ -143,7 +142,6 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.2-x86_64-linux-gnu)
       racc (~> 1.4)
-    open3 (0.2.1)
     parallel (1.26.3)
     parser (3.3.7.1)
       ast (~> 2.4.1)
@@ -231,12 +229,11 @@ GEM
     rubocop-performance (1.23.1)
       rubocop (>= 1.48.1, < 2.0)
       rubocop-ast (>= 1.31.1, < 2.0)
-    ruby-nginx (1.0.0.pre.beta)
+    ruby-nginx (1.0.0.pre.beta.1)
       erb
-      open3
       thor
-      tty-command
-      tty-prompt
+      tty-command (~> 0.10, >= 0.10.1)
+      tty-prompt (~> 0.23, >= 0.23.1)
     ruby-progressbar (1.13.0)
     securerandom (0.4.1)
     standard (1.44.0)
