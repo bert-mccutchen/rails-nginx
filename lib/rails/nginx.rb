@@ -44,7 +44,7 @@ module Rails
         domain: domain,
         port: port,
         root_path: Rails.public_path,
-        template_path: File.expand_path("nginx/nginx.conf.erb", __dir__),
+        template_path: File.expand_path("nginx/templates/nginx.conf.erb", __dir__),
         ssl: true,
         log: true,
         ssl_certificate_path: Rails.root.join("tmp/nginx/_#{domain}.pem"),
