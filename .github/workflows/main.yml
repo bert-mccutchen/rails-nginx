@@ -9,6 +9,7 @@ on:
 jobs:
   macos_regression:
     runs-on: macos-latest
+    timeout-minutes: 3
     strategy:
       matrix:
         ruby:
@@ -26,6 +27,7 @@ jobs:
       run: bundle exec rake
   ubuntu_regression:
     runs-on: ubuntu-latest
+    timeout-minutes: 3
     strategy:
       matrix:
         ruby:
