@@ -1,10 +1,10 @@
 PATH
   remote: ../..
   specs:
-    rails-nginx (1.0.0.pre.beta)
+    rails-nginx (1.0.0.pre.beta.5)
       puma
       rails
-      ruby-nginx
+      ruby-nginx (>= 1.0.0.pre.beta.4)
 
 GEM
   remote: https://rubygems.org/
@@ -105,7 +105,7 @@ GEM
       pp (>= 0.6.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
-    logger (1.6.5)
+    logger (1.6.6)
     loofah (2.24.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -143,7 +143,6 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.2-x86_64-linux-musl)
       racc (~> 1.4)
-    open3 (0.2.1)
     pastel (0.8.0)
       tty-color (~> 0.5)
     pp (0.6.2)
@@ -155,7 +154,7 @@ GEM
     puma (6.6.0)
       nio4r (~> 2.0)
     racc (1.8.1)
-    rack (3.1.9)
+    rack (3.1.10)
     rack-session (2.1.0)
       base64 (>= 0.1.0)
       rack (>= 3.0.0)
@@ -197,28 +196,17 @@ GEM
       psych (>= 4.0.0)
     reline (0.6.0)
       io-console (~> 0.5)
-    ruby-nginx (1.0.0.pre.beta)
+    ruby-nginx (1.0.0.pre.beta.4)
       erb
-      open3
       thor
-      tty-command
-      tty-prompt
+      tty-command (~> 0.10, >= 0.10.1)
     securerandom (0.4.1)
-    stringio (3.1.2)
+    stringio (3.1.3)
     thor (1.3.2)
     timeout (0.4.3)
     tty-color (0.6.0)
     tty-command (0.10.1)
       pastel (~> 0.8)
-    tty-cursor (0.7.1)
-    tty-prompt (0.23.1)
-      pastel (~> 0.8)
-      tty-reader (~> 0.8)
-    tty-reader (0.9.0)
-      tty-cursor (~> 0.7)
-      tty-screen (~> 0.8)
-      wisper (~> 2.0)
-    tty-screen (0.8.2)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     uri (1.0.2)
@@ -227,7 +215,6 @@ GEM
       base64
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    wisper (2.0.1)
     zeitwerk (2.7.1)
 
 PLATFORMS
