@@ -30,6 +30,7 @@ Puma::Plugin.create do
   def config(puma_config)
     rails_port!
 
+    puma_config.clear_binds!
     puma_config.port Rails::Nginx.port
 
     puma_config.on_booted do

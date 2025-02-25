@@ -67,31 +67,30 @@ gem install rails-nginx
 
 Add the Puma plugin to your configuration, and limit it to your development environment.
 
-**config/puma.rb**
+**File: config/puma.rb**
 ```ruby
 plugin :rails_nginx if Rails.env.development?
 ```
 
-> [!IMPORTANT]
-> **If you skip this, NGINX reverse proxy will have a randomized port while Puma will not. The reverse proxy will not work.**
+Then simply start Rails!
+
+**Terminal**
+```
+> ./bin/rails
+```
+
+OR
+
+```
+> ./bin/rails -p 3001
+```
+
+> [!NOTE]
+> Rails NGINX will clear all port bindings and assign back to Puma a random open port, or the provided Rails port parameter.
 >
-> Puma's `port` configuration option makes it impossible for Rails NGINX to assign a random open port back to Puma.
->
-> To fix this issue, simply remove it from our Puma configuration.
->
-> **config/puma.rb**
+> The following Puma configuration will be **ignored**.
 > ```ruby
 > port ENV.fetch("PORT") { 3000 }
-> ```
->
-> OR simply disable it in your development environment:
-> ```ruby
-> port ENV.fetch("PORT") { 3000 } unless Rails.env.development?
-> ```
->
-> OR always manually provide an open port when starting Rails:
-> ```
-> ./bin/rails server -p 3001
 > ```
 
 ### Default Configuration

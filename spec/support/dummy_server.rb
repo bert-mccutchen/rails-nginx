@@ -2,7 +2,7 @@ require "singleton"
 
 ENV["SKIP_PROMPT"] = "true"
 APP_PATH = File.expand_path("../dummy/config/application", __dir__)
-ARGV = ["server", "-p", "3001"]
+ARGV = ["server"]
 
 class DummyServer
   include Singleton
