@@ -107,6 +107,9 @@ By default, Rails NGINX will configure [Ruby NGINX](https://github.com/bert-mccu
 | `ssl_certificate_key_path` | `Rails.root` + `tmp/nginx/_[DOMAIN]-key.pem` | `/home/bert/hello_world/tmp/nginx/_hello-world.test-key.pem` |
 | `access_log_path` | `Rails.root` + `log/nginx/[DOMAIN].access.log` | `/home/bert/hello_world/log/hello-world.test.access.log` |
 | `error_log_path` | `Rails.root` + `log/nginx/[DOMAIN].error.log` | `/home/bert/hello_world/log/hello-world.test.error.log` |
+| `skip_teardown`* | `false` | |
+
+\* Skipping teardown simply leaves the NGINX configuration and hosts mapping in place. This can be useful if you require elevated permissions to change the hosts file, and you don't want to be asked to enter your credentials every time. Any attempts to visit the server's domain while the server is offline will result in a NGINX error page.
 
 ### Advanced Usage
 

@@ -2,6 +2,7 @@
 
 require "socket"
 require "ruby/nginx"
+require_relative "nginx/configuration"
 require_relative "nginx/version"
 
 module Rails
@@ -13,9 +14,10 @@ module Rails
     end
 
     def self.start!(options = {}, &block)
-      return unless rails_server?
+      rails_config = Configuration.new(options)
+      return unless rails_config.rails_server?
 
-      config = Ruby::Nginx.add!(options.reverse_merge(defaults(options)), &block)
+      config = Ruby::Nginx.add!(rails_config.nginx_options, &block)
 
       puts start_message(config.options)
     rescue Ruby::Nginx::Error => e
@@ -23,37 +25,16 @@ module Rails
     end
 
     def self.stop!(options = {}, &block)
-      return unless rails_server?
+      rails_config = Configuration.new(options)
+      return unless rails_config.rails_server? && rails_config.teardown?
 
-      Ruby::Nginx.remove!(options.reverse_merge(defaults(options)), &block)
+      puts stop_message(rails_config.nginx_options)
+      Ruby::Nginx.remove!(rails_config.nginx_options, &block)
     rescue Ruby::Nginx::Error => e
       abort "[Ruby::Nginx] #{e.message}"
     end
 
     private
-
-    def self.rails_server?
-      defined?(Rails::Server)
-    end
-    private_class_method :rails_server?
-
-    def self.defaults(options)
-      domain = options[:domain] || "#{Rails.application.class.module_parent.name.underscore.dasherize}.test"
-
-      {
-        domain: domain,
-        port: port,
-        root_path: Rails.public_path,
-        template_path: File.expand_path("nginx/templates/nginx.conf.erb", __dir__),
-        ssl: true,
-        log: true,
-        ssl_certificate_path: Rails.root.join("tmp/nginx/_#{domain}.pem"),
-        ssl_certificate_key_path: Rails.root.join("tmp/nginx/_#{domain}-key.pem"),
-        access_log_path: Rails.root.join("log/nginx/#{domain}.access.log"),
-        error_log_path: Rails.root.join("log/nginx/#{domain}.error.log")
-      }
-    end
-    private_class_method :defaults
 
     def self.start_message(config)
       message = ["* Rails NGINX version: #{Rails::Nginx::VERSION}"]
@@ -65,5 +46,10 @@ module Rails
       message.join("\n")
     end
     private_class_method :start_message
+
+    def self.stop_message(config)
+      "- Tearing down Rails NGINX config: #{config[:domain]}"
+    end
+    private_class_method :stop_message
   end
 end
