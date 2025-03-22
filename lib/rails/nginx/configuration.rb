@@ -33,6 +33,7 @@ module Rails
           template_path: File.expand_path("templates/nginx.conf.erb", __dir__),
           ssl: true,
           log: true,
+          temp_path: Rails.root.join("tmp/nginx"),
           ssl_certificate_path: Rails.root.join("tmp/nginx/_#{domain}.pem"),
           ssl_certificate_key_path: Rails.root.join("tmp/nginx/_#{domain}-key.pem"),
           access_log_path: Rails.root.join("log/nginx/#{domain}.access.log"),

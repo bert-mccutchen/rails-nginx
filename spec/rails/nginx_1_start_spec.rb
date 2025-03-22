@@ -2,6 +2,8 @@
 
 RSpec.describe Rails::Nginx do
   before(:all) do
+    FileUtils.rm_rf("#{RSpec.configuration.dummy_path}/tmp")
+
     puts "Starting Dummy Server"
     DummyServer.instance.start
   rescue
@@ -31,6 +33,13 @@ RSpec.describe Rails::Nginx do
     retry_expectation(limit: 30, delay: 1) do
       path = File.expand_path("~/.ruby-nginx/servers/ruby_nginx_dummy_test.conf")
       expect(File.exist?(path)).to be_truthy
+    end
+  end
+
+  it "creates the NGINX temp path" do
+    retry_expectation(limit: 30, delay: 1) do
+      path = File.expand_path("#{RSpec.configuration.dummy_path}/tmp")
+      expect(Dir.exist?(path)).to be_truthy
     end
   end
 

@@ -4,7 +4,7 @@ PATH
     rails-nginx (1.0.0.pre.beta.6)
       puma
       rails
-      ruby-nginx (>= 1.0.0.pre.beta.4)
+      ruby-nginx (>= 1.0.0)
 
 GEM
   remote: https://rubygems.org/
@@ -233,7 +233,7 @@ GEM
     rubocop-performance (1.23.1)
       rubocop (>= 1.48.1, < 2.0)
       rubocop-ast (>= 1.31.1, < 2.0)
-    ruby-nginx (1.0.0.pre.beta.4)
+    ruby-nginx (1.0.0)
       erb
       thor
       tty-command (~> 0.10, >= 0.10.1)
