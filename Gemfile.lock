@@ -1,10 +1,10 @@
 PATH
   remote: .
   specs:
-    rails-nginx (1.0.4)
+    rails-nginx (1.0.5)
       puma
       rails
-      ruby-nginx (>= 1.0.3)
+      ruby-nginx (>= 1.0.4)
 
 GEM
   remote: https://rubygems.org/
@@ -237,7 +237,7 @@ GEM
       lint_roller (~> 1.1)
       rubocop (>= 1.75.0, < 2.0)
       rubocop-ast (>= 1.38.0, < 2.0)
-    ruby-nginx (1.0.3)
+    ruby-nginx (1.0.4)
       erb
       thor
       tty-command (~> 0.10, >= 0.10.1)
