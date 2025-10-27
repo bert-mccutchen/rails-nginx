@@ -26,8 +26,10 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
+    - name: Run the Appraisal installer
+      run: bundle exec appraisal install
     - name: Run the default task
-      run: bundle exec rake
+      run: bundle exec appraisal rake
   ubuntu_regression:
     runs-on: ubuntu-latest
     timeout-minutes: 3
@@ -44,5 +46,7 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
+    - name: Run the Appraisal installer
+      run: bundle exec appraisal install
     - name: Run the default task
       run: bundle exec appraisal rake
