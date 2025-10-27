@@ -2,6 +2,8 @@
 
 RSpec.describe Ruby::Nginx do
   it "removes the default hosts mapping" do
+    skip_unless_stopped_hook_supported!
+
     retry_expectation(limit: 3, delay: 1) do
       hosts = File.read("/etc/hosts")
       expect(hosts).not_to include("dummy.test")
@@ -9,6 +11,8 @@ RSpec.describe Ruby::Nginx do
   end
 
   it "removes the custom hosts mapping" do
+    skip_unless_stopped_hook_supported!
+
     retry_expectation(limit: 3, delay: 1) do
       hosts = File.read("/etc/hosts")
       expect(hosts).not_to include("custom.dummy.test")
@@ -16,6 +20,8 @@ RSpec.describe Ruby::Nginx do
   end
 
   it "deletes the default NGINX configuration" do
+    skip_unless_stopped_hook_supported!
+
     retry_expectation(limit: 3, delay: 1) do
       path = File.expand_path("~/.ruby-nginx/servers/ruby_nginx_dummy_test.conf")
       expect(File.exist?(path)).to be_falsey
@@ -23,6 +29,8 @@ RSpec.describe Ruby::Nginx do
   end
 
   it "deletes the custom NGINX configuration" do
+    skip_unless_stopped_hook_supported!
+
     retry_expectation(limit: 3, delay: 1) do
       path = File.expand_path("~/.ruby-nginx/servers/ruby_nginx_custom_dummy_test.conf")
       expect(File.exist?(path)).to be_falsey
@@ -30,6 +38,8 @@ RSpec.describe Ruby::Nginx do
   end
 
   it "successfully tears down the default NGINX site" do
+    skip_unless_stopped_hook_supported!
+
     retry_expectation(limit: 3, delay: 1) do
       html = `curl -s http://dummy.test`
       expect(html).to eq("")
@@ -40,6 +50,8 @@ RSpec.describe Ruby::Nginx do
   end
 
   it "successfully tears down the custom NGINX site" do
+    skip_unless_stopped_hook_supported!
+
     retry_expectation(limit: 3, delay: 1) do
       html = `curl -s http://custom.dummy.test`
       expect(html).to eq("")

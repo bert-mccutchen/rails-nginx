@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "puma/plugin"
+require_relative "hooks_wrapper"
 require_relative "../../rails/nginx"
 
 # The Puma team recommends this approach to extend the Puma DSL.
@@ -27,13 +28,15 @@ def rails_port!
 end
 
 Puma::Plugin.create do
+  include HooksWrapper
+
   def config(puma_config)
     rails_port!
 
     puma_config.clear_binds!
     puma_config.port Rails::Nginx.port
 
-    puma_config.on_booted do
+    booted(puma_config) do
       if puma_config.rails_nginx_configs.empty?
         Rails::Nginx.start!
       else
@@ -43,7 +46,7 @@ Puma::Plugin.create do
       end
     end
 
-    puma_config.on_restart do
+    restarted(puma_config) do
       if puma_config.rails_nginx_configs.empty?
         Rails::Nginx.stop!
         Rails::Nginx.start!
@@ -55,14 +58,12 @@ Puma::Plugin.create do
       end
     end
 
-    if defined?(puma_config.on_stopped)
-      puma_config.on_stopped do
-        if puma_config.rails_nginx_configs.empty?
-          Rails::Nginx.stop!
-        else
-          puma_config.rails_nginx_configs.each_value do |options|
-            Rails::Nginx.stop!(options)
-          end
+    stopped(puma_config) do
+      if puma_config.rails_nginx_configs.empty?
+        Rails::Nginx.stop!
+      else
+        puma_config.rails_nginx_configs.each_value do |options|
+          Rails::Nginx.stop!(options)
         end
       end
     end

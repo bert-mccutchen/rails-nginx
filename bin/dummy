@@ -18,7 +18,7 @@ bundle install
 
 # We need Puma 6.50 for the new on_stopped hook.
 bundle remove puma
-bundle add puma --version ">= 6.5.0"
+bundle add puma --version ">= 7.1.0"
 
 # Configure Puma with rails-nginx
 cat >> ./config/puma.rb << EOF

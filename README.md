@@ -180,6 +180,13 @@ Run the Standard Ruby linter, and RSpec test suite.
 bundle exec rake
 ```
 
+**OR**
+
+Run the rake task through [Appraisal](https://github.com/thoughtbot/appraisal) to test against many Puma versions.
+```
+bundle exec appraisal rake
+```
+
 #### Generating a new Dummy server
 
 There's a built-in executable if you'd like to generate a new Dummy server to upgrade the regression tests to work with the latest version of Rails.
