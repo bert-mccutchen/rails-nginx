@@ -272,7 +272,12 @@ GEM
     zeitwerk (2.7.3)
 
 PLATFORMS
-  x86_64-linux-gnu
+  aarch64-linux
+  arm-linux
+  arm64-darwin
+  x86-linux
+  x86_64-darwin
+  x86_64-linux
 
 DEPENDENCIES
   appraisal
