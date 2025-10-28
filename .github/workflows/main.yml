@@ -23,9 +23,9 @@ jobs:
           - "3.3"
           - "3.4"
         gemfile:
-          - "puma-6-latest"
-          - "puma-6.5-latest"
-          - "puma-7-latest"
+          - "puma_6_latest"
+          - "puma_6.5_latest"
+          - "puma_7_latest"
     runs-on: ${{ matrix.os }}
     env:
       BUNDLE_GEMFILE: ${{ github.workspace }}/gemfiles/${{ matrix.gemfile }}.gemfile
