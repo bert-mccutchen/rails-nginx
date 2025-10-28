@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - develop
   pull_request:
     branches:
       - main
@@ -10,15 +11,24 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  macos_regression:
-    runs-on: macos-latest
+  regression_tests:
     timeout-minutes: 3
     strategy:
       matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
         ruby:
           - "3.2"
           - "3.3"
           - "3.4"
+        gemfile:
+          - "puma-6-latest"
+          - "puma-6.5-latest"
+          - "puma-7-latest"
+    runs-on: ${{ matrix.os }}
+    env:
+      BUNDLE_GEMFILE: ${{ github.workspace }}/gemfiles/${{ matrix.gemfile }}.gemfile
     steps:
     - uses: actions/checkout@v4
     - name: Set up Ruby
@@ -26,27 +36,5 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - name: Run the Appraisal installer
-      run: bundle exec appraisal install
     - name: Run the default task
-      run: bundle exec appraisal rake
-  ubuntu_regression:
-    runs-on: ubuntu-latest
-    timeout-minutes: 3
-    strategy:
-      matrix:
-        ruby:
-          - "3.2"
-          - "3.3"
-          - "3.4"
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby }}
-        bundler-cache: true
-    - name: Run the Appraisal installer
-      run: bundle exec appraisal install
-    - name: Run the default task
-      run: bundle exec appraisal rake
+      run: bundle exec appraisal ${{ matrix.gemfile }} rake
